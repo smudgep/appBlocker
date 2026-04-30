@@ -18,6 +18,8 @@ struct ContentView: View {
     @State private var quizQs = "What is 12 x 12?"
     @State private var correctAns = "144"
     
+    @State private var selectedApps = false
+    
     var body: some View {
         //topbar (title)
         NavigationStack{
@@ -54,22 +56,40 @@ struct ContentView: View {
                     .tint(.red)
                     .navigationTitle("Focus Mode")
                     .sheet(isPresented: $showingQuiz){
-                        VStack(spacing: 20){
-                            Text("Brain Test").font(.headline)
-                            Text(quizQs).font(.title)
-                            
-                            TextField("Enter Answer: ", text: $userAns)
-                                .textFieldStyle(.roundedBorder)
-                                .keyboardType(.numberPad)
-                                .padding()
-                            
-                            Button("Submit + Unblock"){
-                                checkAnswer()
+                            VStack(spacing: 30) {
+                                Capsule() // A little grab bar at the top
+                                    .fill(Color.secondary.opacity(0.5))
+                                    .frame(width: 40, height: 6)
+                                    .padding(.top)
+
+                                Text("Focus Check")
+                                    .font(.caption)
+                                    .tracking(2)
+                                    .foregroundColor(.secondary)
+
+                                Text(quizQs)
+                                    .font(.title2.bold())
+                                    .multilineTextAlignment(.center)
+
+                                TextField("Answer here...", text: $userAns)
+                                    .textFieldStyle(.plain)
+                                    .font(.title)
+                                    .multilineTextAlignment(.center)
+                                    .padding()
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(15)
+
+                                Button("Unlock Apps") {
+                                    checkAnswer()
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .controlSize(.large)
+                                .tint(.red)
+                                
+                                Spacer()
                             }
-                            .buttonStyle(.borderedProminent)
+                            .padding()
                         }
-                        .padding()
-                    }
                 }
                 
                 Section(header: Text("Requirements")){
@@ -82,6 +102,22 @@ struct ContentView: View {
                     }
                     
                     DatePicker("Start Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                }
+                
+                Section(header: Text("Target Apps")){
+                    HStack{
+                        Image(systemName: "Ro")
+                            .foregroundColor(.blue)
+                        Text("Select Apps to Block")
+                        Spacer()
+                        Button(action: {
+                            //screentime app
+                        }){
+                            Text("Edit")
+                                .foregroundColor(.blue)
+                                .font(.subheadline)
+                        }
+                    }
                 }
             }
         }
